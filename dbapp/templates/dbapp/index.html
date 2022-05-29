@@ -1,0 +1,69 @@
+{% load static %}
+{% load dbapp_extras %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/index.css' %}">
+    <title>Library Management System</title>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            Book Lover
+        </h1>
+        
+        <a href="{%url 'members'%}"><button class="btn-head btn btn-lg" type="button">Members</button></a>
+        <a href="{% url 'loans' %}"><button class="btn-head btn btn-lg" type="button">Loans</button></a>
+        <a href="{% url 'reservations' %}"><button class="btn-head btn btn-lg" type="button">Reservations</button></a>
+        <a href="{% url 'transactions' %}"><button class="btn-head btn btn-lg" type="button">Operations</button></a>
+        <a href="{% url 'popular_books' %}"><button class="btn-head btn btn-lg" type="button">Popular Books</button></a>
+        <a href="{% url 'members_fine' %}"><button class="btn-head btn btn-lg" type="button">Members with fine</button></a>
+    </div>
+
+    <div class="nothead">
+        <div class="welcome">
+            <h2>Welcome to our Library</h2>
+        </div>
+
+        
+        <div class="container">
+            {% get_books_limit 'id' as books %}
+            <div class="data">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Book</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Publication Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for b in books %}
+                            <tr>
+                                <th scope="row">{{ b.id }}</th>
+                                <td><a href="book/{{b.id}}" id="{{b.id}}">{{ b.title }}</a></td>
+                                <td>{{ b.get_category }}</td>
+                                <td>{{ b.publication_date }}</td>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{%url 'all_books'%}"><button class="btn-foot btn" type="button">See all</button></a>
+            </div>
+            <div class="categories">
+                <a href="{% url 'sort_categories' %}"><h3>Categories</h3></a>
+                {% get_categories as cats %}
+                <ul>
+                    {% for c in cats %}
+                        <li><a href="category/{{c.id}}" id="{{c.id}}"><h4> {{ c.category_name }}</h4></a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
